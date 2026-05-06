@@ -19,7 +19,7 @@ const planningChecklist = [
   {
     title: "Menu tasting",
     detail: "Savor & Vine Catering",
-    status: "Scheduled May 23",
+    status: "Scheduled May 23, 2026",
   },
 ];
 
