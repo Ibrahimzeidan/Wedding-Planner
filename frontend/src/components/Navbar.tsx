@@ -1,69 +1,78 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { House, Info, LogIn, Mail, UserPlus, type LucideIcon } from "lucide-react";
-
-type NavLink = {
-  href: string;
-  label: string;
-  icon: LucideIcon;
-};
-
-const navLinks: NavLink[] = [
-  { href: "/", label: "Home", icon: House },
-  { href: "/about", label: "About Us", icon: Info },
-  { href: "/contact", label: "Contact Us", icon: Mail },
-  { href: "/login", label: "Login", icon: LogIn },
-  { href: "/register", label: "Register", icon: UserPlus },
-];
+import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
+import BrandLink from "@/components/navbar/BrandLink";
+import NavLinkList from "@/components/navbar/NavLinkList";
+import ProfileDropdown from "@/components/navbar/ProfileDropdown";
+import { guestLinks, navLinks } from "@/components/navbar/navData";
+import { authChangedEvent, getAuthSession, type AuthUser } from "@/lib/auth";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const visibleLinks = user ? navLinks : [...navLinks, ...guestLinks];
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    function syncSession() {
+      setUser(getAuthSession()?.user ?? null);
+    }
+
+    syncSession();
+    window.addEventListener(authChangedEvent, syncSession);
+    window.addEventListener("storage", syncSession);
+
+    return () => {
+      window.removeEventListener(authChangedEvent, syncSession);
+      window.removeEventListener("storage", syncSession);
+    };
+  }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#d8b45f]/40 bg-[#42162f]/95 shadow-[0_8px_24px_rgba(66,22,47,0.14)] backdrop-blur">
-      <nav className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#fff8e7] ring-1 ring-[#d8b45f]">
-            <Image
-              src="/images/logo.jpeg"
-              alt="Smart Wedding Planner logo"
-              width={44}
-              height={44}
-              className="h-11 w-11 object-cover"
-              priority
-            />
-          </span>
-          <div>
-            <p className="text-lg font-semibold text-[#fff8e7]">Smart Wedding Planner</p>
-            <p className="text-xs uppercase tracking-[0.18em] text-[#f5c7d3]">Elegant planning</p>
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#111111]/95 backdrop-blur">
+      <nav className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8 xl:px-10">
+        <div className="flex items-center justify-between gap-3">
+          <BrandLink />
+          <div className="hidden items-center gap-1 lg:flex xl:gap-2">
+            <NavLinkList links={visibleLinks} pathname={pathname} variant="desktop" />
+            {user && <ProfileDropdown user={user} />}
           </div>
-        </Link>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
-            const Icon = link.icon;
-
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
-                  isActive
-                    ? "bg-[#fff8e7] text-[#42162f] ring-1 ring-[#d8b45f]/70"
-                    : "text-[#fff8e7] hover:bg-[#fff8e7]/12 hover:text-[#f5c7d3]"
-                }`}
-              >
-                <Icon size={16} strokeWidth={1.8} className="shrink-0" aria-hidden="true" />
-                <span>{link.label}</span>
-              </Link>
-            );
-          })}
+          <div className="flex items-center gap-2 lg:hidden">
+            {user && <ProfileDropdown user={user} />}
+            <MenuButton isOpen={isMenuOpen} onClick={() => setIsMenuOpen((current) => !current)} />
+          </div>
         </div>
+        {isMenuOpen && (
+          <div className="mt-3 grid gap-2 border border-white/10 bg-[#1c1c1c] p-2 shadow-soft sm:grid-cols-2 lg:hidden">
+            <NavLinkList
+              links={visibleLinks}
+              pathname={pathname}
+              variant="mobile"
+              onClick={() => setIsMenuOpen(false)}
+            />
+          </div>
+        )}
       </nav>
     </header>
+  );
+}
+
+function MenuButton({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+      aria-expanded={isOpen}
+      onClick={onClick}
+      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#111111]"
+    >
+      {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+    </button>
   );
 }

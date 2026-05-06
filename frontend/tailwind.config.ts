@@ -22,12 +22,18 @@ const config: Config = {
           500: "#c9a227",
           700: "#8a6f1a",
         },
+        event: {
+          ink: "#111111",
+          paper: "#efefef",
+          pearl: "#f8f6f1",
+          taupe: "#d8d0c5",
+        },
       },
       fontFamily: {
-        sans: ["Inter", "Segoe UI", "Arial", "sans-serif"],
+        sans: ["Montserrat", "Inter", "Segoe UI", "Arial", "sans-serif"],
       },
       boxShadow: {
-        soft: "0 20px 45px rgba(217, 107, 143, 0.12)",
+        soft: "0 20px 45px rgba(17, 17, 17, 0.08)",
       },
     },
   },
