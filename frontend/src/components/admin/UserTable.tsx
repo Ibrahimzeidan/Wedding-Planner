@@ -1,7 +1,13 @@
 import { getRoleLabel } from "@/lib/auth";
 import type { AdminUser } from "@/types/admin";
 
-export default function UserTable({ users }: { users: AdminUser[] }) {
+type UserTableProps = {
+  users: AdminUser[];
+  onDelete: (user: AdminUser) => void;
+  onEdit: (user: AdminUser) => void;
+};
+
+export default function UserTable({ users, onDelete, onEdit }: UserTableProps) {
   return (
     <div className="overflow-hidden border border-[#111111]/10 bg-white shadow-soft">
       <div className="overflow-x-auto">
@@ -11,7 +17,9 @@ export default function UserTable({ users }: { users: AdminUser[] }) {
               <th className="px-4 py-3">Full name</th>
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Role</th>
+              <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Created</th>
+              <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#111111]/10">
@@ -24,7 +32,18 @@ export default function UserTable({ users }: { users: AdminUser[] }) {
                     {getRoleLabel(user.role)}
                   </span>
                 </td>
+                <td className="px-4 py-4">{user.is_active ? "Active" : "Inactive"}</td>
                 <td className="px-4 py-4">{new Date(user.created_at).toLocaleDateString()}</td>
+                <td className="px-4 py-4">
+                  <div className="flex gap-2">
+                    <button onClick={() => onEdit(user)} className="rounded-full border px-3 py-1 font-semibold">
+                      Edit
+                    </button>
+                    <button onClick={() => onDelete(user)} className="rounded-full bg-red-600 px-3 py-1 font-semibold text-white">
+                      Delete
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>

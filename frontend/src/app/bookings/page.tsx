@@ -1,17 +1,26 @@
-import { CalendarCheck } from "lucide-react";
-import EmptyStatePage from "@/components/shared/EmptyStatePage";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { getAuthSession } from "@/lib/auth";
 
 export default function BookingsPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const session = getAuthSession();
+    if (!session) {
+      router.replace("/login");
+      return;
+    }
+    const role = session.user.role;
+    const base = role === "admin" ? "admin" : role === "customer" ? "customer" : "provider";
+    router.replace(`/dashboard/${base}/bookings`);
+  }, [router]);
+
   return (
-    <EmptyStatePage
-      eyebrow="Bookings"
-      title="My Bookings"
-      description="Your booked services will appear here."
-      emptyTitle="No bookings yet"
-      emptyDescription="When you request or confirm a wedding service, it will be listed here for easy tracking."
-      actionLabel="Explore Dashboard"
-      actionHref="/dashboard/customer"
-      icon={CalendarCheck}
-    />
+    <main className="min-h-screen bg-[#efefef] p-10 text-sm text-stone-600">
+      Opening bookings...
+    </main>
   );
 }

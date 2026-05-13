@@ -38,6 +38,7 @@ export function validateRegisterForm(form: RegisterFormState) {
   if (!form.confirmPassword) return "Confirm password is required.";
   if (form.password !== form.confirmPassword) return "Password and confirm password must match.";
   if (form.role === "service_provider" && !form.category) return "Service category is required.";
+  if (form.category === "Venue Planner") return "Venue Planner is no longer available.";
 
   return "";
 }

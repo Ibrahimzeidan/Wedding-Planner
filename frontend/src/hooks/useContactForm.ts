@@ -4,10 +4,11 @@ import { apiBaseUrl } from "@/lib/auth";
 export type ContactFormState = {
   name: string;
   email: string;
+  phone: string;
   message: string;
 };
 
-const initialFormState: ContactFormState = { name: "", email: "", message: "" };
+const initialFormState: ContactFormState = { name: "", email: "", phone: "", message: "" };
 
 export function useContactForm() {
   const [form, setForm] = useState<ContactFormState>(initialFormState);

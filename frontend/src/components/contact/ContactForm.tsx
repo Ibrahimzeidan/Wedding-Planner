@@ -12,24 +12,34 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={state.handleSubmit}
-      className="w-full bg-white p-6 shadow-soft sm:p-8"
+      className="rounded-2xl border border-[#111111]/10 bg-white p-6 shadow-soft sm:p-8"
     >
       <div className="grid gap-4 sm:gap-5">
         <FormInput
-          label="Name"
+          label="Full Name"
           name="name"
           value={state.form.name}
           onChange={(value) => state.updateField("name", value)}
-          placeholder="Your name"
+          placeholder="Name"
+          inputClassName={fieldClass}
           required
         />
         <FormInput
-          label="Email"
+          label="Contact Number"
+          name="phone"
+          value={state.form.phone}
+          onChange={(value) => state.updateField("phone", value)}
+          placeholder="contact number"
+          inputClassName={fieldClass}
+        />
+        <FormInput
+          label="Email Address"
           name="email"
           type="email"
           value={state.form.email}
           onChange={(value) => state.updateField("email", value)}
           placeholder="you@example.com"
+          inputClassName={fieldClass}
           required
         />
         <ContactTextarea
@@ -39,9 +49,9 @@ export default function ContactForm() {
         <Button
           type="submit"
           disabled={state.isSending}
-          className="w-full sm:w-auto sm:justify-self-start"
+          className="mt-2 w-full rounded-full px-16 sm:w-auto"
         >
-          {state.isSending ? "Sending..." : "Send Message"}
+          {state.isSending ? "Sending..." : "Submit"}
         </Button>
         <FormMessage message={state.successMessage} type="success" />
         <FormMessage message={state.errorMessage} type="error" />
@@ -49,3 +59,5 @@ export default function ContactForm() {
     </form>
   );
 }
+
+const fieldClass = "rounded-xl border border-[#111111]/15 bg-stone-50 px-4 focus:bg-white";

@@ -18,4 +18,4 @@ def health_check(db: Session = Depends(get_db)) -> dict[str, str]:
             detail={"status": "error", "database": "disconnected"},
         ) from error
 
-    return {"status": "ok", "database": "connected"}
+    return {"status": "ok"}

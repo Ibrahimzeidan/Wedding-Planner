@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import BrandLink from "@/components/navbar/BrandLink";
 import NavLinkList from "@/components/navbar/NavLinkList";
+import NotificationBell from "@/components/notifications/NotificationBell";
 import ProfileDropdown from "@/components/navbar/ProfileDropdown";
 import { guestLinks, navLinks } from "@/components/navbar/navData";
 import { authChangedEvent, getAuthSession, type AuthUser } from "@/lib/auth";
@@ -14,6 +15,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
   const visibleLinks = user ? navLinks : [...navLinks, ...guestLinks];
+  const overlay = isHeroRoute(pathname);
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -35,15 +37,17 @@ export default function Navbar() {
   }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#111111]/95 backdrop-blur">
+    <header className={`${overlay ? "absolute bg-transparent" : "sticky bg-[#111111]"} left-0 top-0 z-50 w-full`}>
       <nav className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8 xl:px-10">
         <div className="flex items-center justify-between gap-3">
           <BrandLink />
           <div className="hidden items-center gap-1 lg:flex xl:gap-2">
             <NavLinkList links={visibleLinks} pathname={pathname} variant="desktop" />
+            {user && <NotificationBell />}
             {user && <ProfileDropdown user={user} />}
           </div>
           <div className="flex items-center gap-2 lg:hidden">
+            {user && <NotificationBell />}
             {user && <ProfileDropdown user={user} />}
             <MenuButton isOpen={isMenuOpen} onClick={() => setIsMenuOpen((current) => !current)} />
           </div>
@@ -61,6 +65,10 @@ export default function Navbar() {
       </nav>
     </header>
   );
+}
+
+function isHeroRoute(pathname: string) {
+  return ["/", "/about", "/contact", "/packages", "/services", "/venues"].includes(pathname);
 }
 
 function MenuButton({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) {

@@ -1,4 +1,5 @@
 import { type LucideIcon } from "lucide-react";
+import Link from "next/link";
 
 type DashboardCardProps = {
   title: string;
@@ -6,6 +7,7 @@ type DashboardCardProps = {
   icon: LucideIcon;
   accent?: "pink" | "gold" | "burgundy";
   id?: string;
+  href?: string;
 };
 
 const accentStyles = {
@@ -20,8 +22,9 @@ export default function DashboardCard({
   icon: Icon,
   accent = "pink",
   id,
+  href,
 }: DashboardCardProps) {
-  return (
+  const content = (
     <article id={id} className="border border-[#111111]/10 bg-white p-5 shadow-soft transition hover:-translate-y-0.5">
       <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ring-1 ${accentStyles[accent]}`}>
         <Icon size={20} strokeWidth={1.8} aria-hidden="true" />
@@ -30,4 +33,6 @@ export default function DashboardCard({
       <p className="mt-2 text-sm leading-6 text-stone-600">{description}</p>
     </article>
   );
+
+  return href ? <Link href={href}>{content}</Link> : content;
 }

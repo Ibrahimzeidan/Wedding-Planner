@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaPinterestP, FaTwitter } from "react-icons/fa";
 
 const columns = [
   {
     title: "Venues",
-    links: ["Wedding Hall", "Maldives", "Dubai", "Paris"],
+    links: ["Maldives", "India", "Dubai", "Paris"],
   },
   {
     title: "Services",
@@ -12,12 +12,13 @@ const columns = [
   },
   {
     title: "Support",
-    links: ["About Us", "Careers", "Contact Us", "Terms"],
+    links: ["About Us", "Careers", "Contact Us", "Terms & Conditions"],
   },
 ];
 
 const socials = [
   { href: "https://facebook.com", label: "Facebook", icon: FaFacebookF },
+  { href: "https://twitter.com", label: "Twitter", icon: FaTwitter },
   { href: "https://instagram.com", label: "Instagram", icon: FaInstagram },
   { href: "https://pinterest.com", label: "Pinterest", icon: FaPinterestP },
 ];
@@ -27,7 +28,7 @@ export default function Footer() {
     <footer className="bg-[#111111] text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_2fr] lg:px-8 xl:px-10">
         <div>
-          <p className="text-2xl font-semibold">Smart Wedding Planner</p>
+          <p className="text-2xl font-semibold italic">Happily Ever Afters</p>
           <p className="mt-1 text-sm text-white/55">wedding events</p>
           <p className="mt-5 max-w-sm text-sm leading-6 text-white/60">
             A calm planning space for venues, vendors, inspiration, and every detail that makes the day feel personal.
@@ -49,7 +50,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="mx-auto flex max-w-7xl flex-col gap-4 border-t border-white/10 px-4 py-5 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8 xl:px-10">
-        <p>Copyright &copy; {new Date().getFullYear()} Smart Wedding Planner. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Fashion Store. All rights reserved.</p>
         <div className="flex gap-4">
           {socials.map((social) => {
             const Icon = social.icon;

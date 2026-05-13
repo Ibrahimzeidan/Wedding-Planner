@@ -3,6 +3,7 @@ from sqlalchemy import func, select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from category_rules import is_removed_category, visible_category_query
 from database import get_db
 from dependencies import require_admin
 from models import ServiceCategory, ServiceProvider
@@ -27,7 +28,7 @@ def ensure_unique_name(db: Session, name: str, category_id: int | None = None) -
 
 @router.get("", response_model=list[AdminCategoryResponse])
 def list_admin_categories(db: Session = Depends(get_db)) -> list[ServiceCategory]:
-    statement = select(ServiceCategory).order_by(ServiceCategory.name)
+    statement = visible_category_query().order_by(ServiceCategory.name)
     return list(db.scalars(statement).all())
 
 
@@ -36,6 +37,8 @@ def create_category(
     payload: CategoryPayload,
     db: Session = Depends(get_db),
 ) -> ServiceCategory:
+    if is_removed_category(payload.name):
+        raise HTTPException(status_code=400, detail="This category is no longer available.")
     ensure_unique_name(db, payload.name)
     category = ServiceCategory(name=payload.name, description=payload.description)
 
@@ -59,6 +62,8 @@ def update_category(
     category = db.get(ServiceCategory, category_id)
     if not category:
         raise HTTPException(status_code=404, detail="Category not found.")
+    if is_removed_category(payload.name):
+        raise HTTPException(status_code=400, detail="This category is no longer available.")
 
     ensure_unique_name(db, payload.name, category_id)
     category.name = payload.name

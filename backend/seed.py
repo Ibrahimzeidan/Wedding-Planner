@@ -40,6 +40,10 @@ DEFAULT_SERVICE_CATEGORIES = [
         "name": "Car Rental",
         "description": "Wedding cars, luxury vehicles, and guest transportation.",
     },
+    {
+        "name": "Choreographer",
+        "description": "First dance coaching, group performances, and reception choreography.",
+    },
 ]
 
 

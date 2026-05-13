@@ -16,7 +16,7 @@ export default function NavLinkList({ links, pathname, onClick, variant }: NavLi
       {links.map((link) => {
         const Icon = link.icon;
         const isActive = pathname === link.href;
-        const active = "bg-white text-[#111111]";
+        const active = "bg-sky-400 text-white";
         const idle = "text-white/80 hover:bg-white/10 hover:text-white";
         const layout =
           variant === "desktop"
@@ -30,12 +30,7 @@ export default function NavLinkList({ links, pathname, onClick, variant }: NavLi
             onClick={onClick}
             className={`${baseClasses} ${layout} ${isActive ? active : idle}`}
           >
-            <Icon
-              size={variant === "desktop" ? 16 : 17}
-              strokeWidth={1.8}
-              className="shrink-0"
-              aria-hidden="true"
-            />
+            {variant === "mobile" && <Icon size={17} strokeWidth={1.8} aria-hidden="true" />}
             <span>{link.label}</span>
           </Link>
         );

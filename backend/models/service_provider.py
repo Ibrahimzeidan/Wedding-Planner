@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
@@ -23,6 +23,10 @@ class ServiceProvider(Base):
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     location: Mapped[str | None] = mapped_column(String(160), nullable=True)
     phone: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    availability: Mapped[str | None] = mapped_column(Text, nullable=True)
+    rating: Mapped[float] = mapped_column(Numeric(3, 2), default=4.5, nullable=False)
+    venue_type: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    max_guests: Mapped[int | None] = mapped_column(Integer, nullable=True)
     is_approved: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
@@ -32,3 +36,18 @@ class ServiceProvider(Base):
 
     user = relationship("User", back_populates="service_provider_profile")
     category = relationship("ServiceCategory", back_populates="providers")
+    packages = relationship(
+        "ServicePackage",
+        back_populates="provider",
+        cascade="all, delete-orphan",
+    )
+    favorites = relationship(
+        "Favorite",
+        back_populates="provider",
+        cascade="all, delete-orphan",
+    )
+    reviews = relationship(
+        "Review",
+        back_populates="provider",
+        cascade="all, delete-orphan",
+    )

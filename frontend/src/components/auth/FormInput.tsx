@@ -7,6 +7,7 @@ type FormInputProps = {
   value: string;
   placeholder: string;
   required?: boolean;
+  inputClassName?: string;
   onChange: (value: string) => void;
 };
 
@@ -17,6 +18,7 @@ export default function FormInput({
   value,
   placeholder,
   required = false,
+  inputClassName = "",
   onChange,
 }: FormInputProps) {
   return (
@@ -28,6 +30,7 @@ export default function FormInput({
       onChange={(event) => onChange(event.target.value)}
       placeholder={placeholder}
       required={required}
+      className={inputClassName}
     />
   );
 }

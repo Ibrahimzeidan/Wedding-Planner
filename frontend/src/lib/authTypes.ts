@@ -5,6 +5,7 @@ export type AuthUser = {
   full_name: string;
   email: string;
   role: UserRole;
+  profile_image?: string | null;
   created_at: string;
 };
 

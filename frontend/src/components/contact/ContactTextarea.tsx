@@ -13,7 +13,7 @@ export default function ContactTextarea({ value, onChange }: ContactTextareaProp
         onChange={(event) => onChange(event.target.value)}
         placeholder="How can we help with your wedding plans?"
         required
-        className="min-h-36 w-full min-w-0 resize-y border border-[#111111]/15 bg-transparent px-4 py-3 text-[#111111] outline-none transition placeholder:text-stone-400 focus:border-[#111111]"
+        className="min-h-36 w-full min-w-0 resize-y rounded-xl border border-[#111111]/15 bg-stone-50 px-4 py-3 text-[#111111] outline-none transition placeholder:text-stone-400 focus:border-[#111111] focus:bg-white"
       />
     </label>
   );

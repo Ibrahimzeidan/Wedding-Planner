@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import CheckConstraint, DateTime, Index, Integer, String, text
+from sqlalchemy import Boolean, CheckConstraint, DateTime, Index, Integer, String, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
@@ -26,6 +26,8 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
     password_hash: Mapped[str] = mapped_column("password", String(255), nullable=False)
     role: Mapped[str] = mapped_column(String(50), default="customer", nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    profile_image: Mapped[str | None] = mapped_column(String(1200), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),

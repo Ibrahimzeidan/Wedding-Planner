@@ -2,6 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from category_rules import is_removed_category
 from models import Customer, ServiceCategory, ServiceProvider, User
 from schemas.auth import RegisterRequest
 from security import hash_password
@@ -14,9 +15,12 @@ def get_user_by_email(db: Session, email: str) -> User | None:
 
 def get_service_category(db: Session, payload: RegisterRequest) -> ServiceCategory | None:
     if payload.category_id:
-        return db.get(ServiceCategory, payload.category_id)
+        category = db.get(ServiceCategory, payload.category_id)
+        return None if is_removed_category(category.name if category else None) else category
 
     if not payload.category:
+        return None
+    if is_removed_category(payload.category):
         return None
 
     normalized_category = payload.category.strip().lower()
@@ -61,4 +65,5 @@ def build_profile(
         description=payload.description,
         location=(payload.location or "").strip(),
         phone=(payload.phone or "").strip(),
+        is_approved=True,
     )

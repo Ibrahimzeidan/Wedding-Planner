@@ -10,6 +10,7 @@ import {
   getApiErrorMessage,
   getDashboardPath,
   getRequestErrorMessage,
+  safeReturnTo,
   saveAuthSession,
   type AuthSession,
 } from "@/lib/auth";
@@ -45,7 +46,7 @@ export default function LoginForm() {
 
       const session: AuthSession = await response.json();
       saveAuthSession(session);
-      router.push(getDashboardPath(session.user.role));
+      router.push(safeReturnTo(returnToParam()) || getDashboardPath(session.user.role));
     } catch (error) {
       setErrorMessage(getRequestErrorMessage(error, "Login failed. Please try again."));
     } finally {
@@ -74,13 +75,13 @@ export default function LoginForm() {
         required
       />
       <FormMessage message={errorMessage} type="error" />
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full"
-      >
+      <Button type="submit" disabled={isSubmitting} className="w-full">
         {isSubmitting ? "Logging in..." : "Login"}
       </Button>
     </form>
   );
+}
+
+function returnToParam() {
+  return new URLSearchParams(window.location.search).get("returnTo");
 }

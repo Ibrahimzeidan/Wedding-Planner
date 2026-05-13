@@ -23,3 +23,8 @@ export function getDashboardPath(role: UserRole) {
 export function isDashboardRole(role: UserRole): role is UserRole {
   return role === "customer" || role === "service_provider" || role === "admin";
 }
+
+export function safeReturnTo(value: string | null) {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "";
+  return value;
+}

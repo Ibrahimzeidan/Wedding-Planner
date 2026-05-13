@@ -20,7 +20,7 @@ export default function ServiceCategorySelect({ value, onChange }: ServiceCatego
   useEffect(() => {
     fetch(`${apiBaseUrl}/service-categories`)
       .then((response) => (response.ok ? response.json() : []))
-      .then(setCategories)
+      .then((items) => setCategories(items.filter((item: ServiceCategory) => item.name !== "Venue Planner")))
       .finally(() => setIsLoading(false));
   }, []);
 

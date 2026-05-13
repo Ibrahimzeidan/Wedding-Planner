@@ -35,6 +35,8 @@ def get_current_user(
     user = db.get(User, user_id)
     if not user:
         raise error
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account is inactive.")
 
     return user
 
@@ -44,6 +46,26 @@ def require_admin(user: User = Depends(get_current_user)) -> User:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin access required.",
+        )
+
+    return user
+
+
+def require_service_provider(user: User = Depends(get_current_user)) -> User:
+    if user.role != "service_provider":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Service provider access required.",
+        )
+
+    return user
+
+
+def require_customer(user: User = Depends(get_current_user)) -> User:
+    if user.role != "customer":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Customer access required.",
         )
 
     return user

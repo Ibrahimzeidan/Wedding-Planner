@@ -34,12 +34,17 @@ class AdminCategoryResponse(BaseModel):
 class AdminProviderResponse(BaseModel):
     id: int
     user_id: int
-    category_id: int
+    category_id: int | None = None
     provider_name: str
     email: str
     category_name: str
     business_name: str | None = None
+    description: str | None = None
+    location: str | None = None
+    phone: str | None = None
+    rating: float | None = None
     is_approved: bool
+    is_active: bool
     created_at: datetime
 
 
@@ -48,7 +53,11 @@ class AdminStatsResponse(BaseModel):
     total_customers: int
     total_service_providers: int
     total_categories: int
+    total_packages: int = 0
+    total_wedding_packages: int = 0
+    total_wedding_plans: int = 0
     total_bookings: int = 0
+    total_messages: int = 0
     total_reviews: int = 0
 
 
@@ -57,6 +66,7 @@ class AdminUserResponse(BaseModel):
     full_name: str
     email: str
     role: Literal["customer", "service_provider", "admin"]
+    is_active: bool = True
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
